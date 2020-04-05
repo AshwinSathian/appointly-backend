@@ -1,0 +1,4 @@
+{
+    "MONGO_URI": "mongodb+srv://AshwinSathian:8ocdrc5bHRUlJxBu@cluster0-62iol.mongodb.net/calendlyClone?retryWrites=true&w=majority",
+    "JWT_KEY": "c3YxPqHZXutC4hQx66duKnpZZXwaFMDM"
+}
