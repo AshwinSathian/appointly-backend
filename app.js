@@ -1,4 +1,3 @@
-const path = require('path');
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -11,6 +10,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 // Route dependencies
+const authRoutes = require('./routes/auth.routes');
 
 // DB Connection
 mongoose.connect(config.get('MONGO_URI'), 
@@ -24,9 +24,6 @@ mongoose.connect(config.get('MONGO_URI'),
             function: 'mongoose_connect',
             message: 'DB connection successful'
         });
-
-        // const crons = require('./cron_jobs');
-        // crons.addItemstoDatabase();
     })
     .catch((err) => {
         logger.error({
@@ -43,6 +40,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
+app.use('/api/auth', authRoutes);
 
 // Invalid route
 app.use((req, res) => {
