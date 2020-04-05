@@ -42,12 +42,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
-app.get('/', (req, res) => {
-    res.send('Works')
-})
 app.use('/api/auth', authRoutes);
 app.use('/api/booking', bookingRoutes);
-app.use('/api/slots', slotRoutes);
+app.use('/api/slot', slotRoutes);
 
 // Invalid route
 app.use((req, res) => {
@@ -59,11 +56,9 @@ app.use((req, res) => {
     });
 });
 
-// app.listen(port, () => {
-//     logger.info({
-//         function: 'app_start',
-//         message: 'Backend is listening on port ' + port
-//     });
-// });
-
-module.exports = app;
+app.listen(port, () => {
+    logger.info({
+        function: 'app_start',
+        message: 'Backend is listening on port ' + port
+    });
+});
