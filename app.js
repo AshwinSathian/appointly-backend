@@ -11,6 +11,7 @@ const app = express();
 
 // Route dependencies
 const authRoutes = require('./routes/auth.routes');
+const bookingRoutes = require('./routes/booking.routes');
 
 // DB Connection
 mongoose.connect(config.get('MONGO_URI'), 
@@ -41,6 +42,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/booking', bookingRoutes);
 
 // Invalid route
 app.use((req, res) => {

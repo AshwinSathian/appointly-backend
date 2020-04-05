@@ -75,9 +75,10 @@ exports.login = (req, res, next) => {
         function: 'user_login',
         message: 'User with email ' + fetchedUser.email + ' sucessfully logged in'
     });
+    console.log(token);
     res.status(200).json({
         message: 'User with email ' + fetchedUser.email + ' sucessfully logged in. Login expires in 1 hour.',
-        token: token,
+        token,
         expiresIn: 3600,
         userId: fetchedUser._id
     });

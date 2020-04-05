@@ -4,10 +4,10 @@ const logger = require('../logger');
 
 module.exports = (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization;
     const decodedToken = jwt.verify(token, config.get('JWT_KEY'));
     req.userData = { email: decodedToken.email, userId: decodedToken.userId };
-    if ((decodedToken.timeStamp.getTime() + 3600 * 1000) < Date.now()) {
+    if ((new Date(decodedToken.timeStamp).getTime() + 3600 * 1000) < Date.now()) {
         logger.error({
             function: 'auth_check',
             message: 'User authentication expired'
@@ -23,7 +23,7 @@ module.exports = (req, res, next) => {
   } catch (error) {
     logger.error({
         function: 'auth_check',
-        message: 'User authentication failed'
+        message: 'User authentication failed: ' + error
     });
     return res.status(401).json({ message: 'Authentication failed. Access denied' });
   }
