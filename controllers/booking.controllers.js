@@ -82,20 +82,29 @@ exports.updateAppointment = (req, res, next) => {
 
     Booking
     .updateOne({ _id: req.params.id, host: req.userData.email }, updatedAppointment)
-    .then(savedAppointment => {
-        logger.info({
-            function: 'update_appointment',
-            message: 'Appointment successfully updated'
-        });
-        res.status(200).jsonp({
-            message: 'Appointment successfully updated',
-            details: savedAppointment
-        });
+    .then(result => {
+        if (result.n > 0) {
+            logger.info({
+                function: 'update_appointment',
+                message: 'Appointment successfully updated'
+            });
+            res.status(200).jsonp({ 
+                message: 'Appointment updated successfuly' 
+            });
+        } else {
+            logger.error({
+                function: 'update_appointment',
+                message: 'User unauthorized. Appointment update blocked'
+            });
+            res.status(401).jsonp({ 
+                message: 'User unauthorized' 
+            });
+        }
     })
     .catch(error => {
         logger.error({
             function: 'update_appointment',
-            message: 'Appointment updation failed: ' + error
+            message: 'Appointment update failed: ' + error
         });
         res.status(500).jsonp({
             message: 'Internal server error. Please try again.'
@@ -183,7 +192,7 @@ exports.deleteAppointment = (req, res, next) => {
                 function: 'delete_appointment',
                 message: 'Appointments successfully deleted'
             });
-            res.status(200).json({
+            res.status(200).jsonp({
                 message: 'Appointment deletion successful'
             });
         } else {
@@ -191,7 +200,7 @@ exports.deleteAppointment = (req, res, next) => {
                 function: 'delete_appointment',
                 message: 'Appointments deletion blocked. User unauthorized.'
             });
-            res.status(401).json({
+            res.status(401).jsonp({
                 message: 'User not authorized.Deletion blocked.'
             });
         }
@@ -201,7 +210,7 @@ exports.deleteAppointment = (req, res, next) => {
             function: 'delete_appointment',
             message: 'Appointments deletion failed: ' + error
         });
-        res.status(500).json({
+        res.status(500).jsonp({
             message: 'Internal server error. Please try again.'
         });
     });
