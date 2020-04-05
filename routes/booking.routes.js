@@ -12,6 +12,13 @@ router.post(
     bookingControllers.bookAppointment
 );
 
+router.put(
+    '/update-appointment/:id', 
+    authCheck,
+    bookingControllers.checkSlotAvailability,
+    bookingControllers.updateAppointment
+);
+
 router.get(
     '/get-hosted-appointments/:host', 
     authCheck,
@@ -28,6 +35,12 @@ router.get(
     '/get-all-appointments/:user', 
     authCheck,
     bookingControllers.getAllAppointments
+);
+
+router.delete(
+    '/delete-appointment/:id', 
+    authCheck,
+    bookingControllers.deleteAppointment
 );
 
 module.exports = router;

@@ -70,8 +70,40 @@ exports.bookAppointment = (req, res, next) => {
     });
 };
 
+exports.updateAppointment = (req, res, next) => {
+    const updatedAppointment = new Booking({
+        _id: req.params.id,
+        guest: req.body.guest,
+        host: req.body.host,
+        date: req.body.date,
+        slot: req.body.slot,
+        note: req.body.note
+    });
+
+    Booking
+    .updateOne({ _id: req.params.id, host: req.userData.email }, updatedAppointment)
+    .then(savedAppointment => {
+        logger.info({
+            function: 'update_appointment',
+            message: 'Appointment successfully updated'
+        });
+        res.status(200).jsonp({
+            message: 'Appointment successfully updated',
+            details: savedAppointment
+        });
+    })
+    .catch(error => {
+        logger.error({
+            function: 'update_appointment',
+            message: 'Appointment updation failed: ' + error
+        });
+        res.status(500).jsonp({
+            message: 'Internal server error. Please try again.'
+        });
+    });
+};
+
 exports.getHostedAppointments = (req, res, next) => {
-    console.log(req.params.host)
     Booking
     .find({ host: req.params.host })
     .then(appointments => {
@@ -138,6 +170,38 @@ exports.getAllAppointments = (req, res, next) => {
             message: 'Fetching all appointments failed: ' + error
         });
         res.status(500).jsonp({
+            message: 'Internal server error. Please try again.'
+        });
+    });
+};
+
+exports.deleteAppointment = (req, res, next) => {
+    Booking.deleteOne({ _id: req.params.id, host: req.userData.email })
+    .then(result => {
+        if (result.n > 0) {
+            logger.info({
+                function: 'delete_appointment',
+                message: 'Appointments successfully deleted'
+            });
+            res.status(200).json({
+                message: 'Appointment deletion successful'
+            });
+        } else {
+            logger.error({
+                function: 'delete_appointment',
+                message: 'Appointments deletion blocked. User unauthorized.'
+            });
+            res.status(401).json({
+                message: 'User not authorized.Deletion blocked.'
+            });
+        }
+    })
+    .catch(error => {
+        logger.error({
+            function: 'delete_appointment',
+            message: 'Appointments deletion failed: ' + error
+        });
+        res.status(500).json({
             message: 'Internal server error. Please try again.'
         });
     });
