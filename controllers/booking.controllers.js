@@ -1,6 +1,7 @@
 const logger = require('../logger');
 
 const Booking = require('../models/booking.model');
+const User = require('../models/user.model');
 
 exports.checkSlotAvailability = (req, res, next) => {
     Booking
@@ -31,6 +32,42 @@ exports.checkSlotAvailability = (req, res, next) => {
         logger.error({
             function: 'check_slot_availability',
             message: 'Failed to verify slot availability' + error
+        });
+        return res.status(500).jsonp({
+            message: 'Internal Server Error. Please try again.'
+        });
+    });
+};
+
+exports.resolveUserMame = (req, res, next) => {
+    User
+    .findOne({ email: req.body.guest })
+    .then(fetchedUser => {
+        req.body.guest = fetchedUser.name;
+        User
+        .findOne({ email: req.body.host })
+        .then(fetchedUser => {
+            req.body.host = fetchedUser.name;
+            logger.info({
+                function: 'resolve_user_name',
+                message: 'The guest and host names have been resolved'
+            });
+            next();
+        })
+        .catch(error => {
+            logger.error({
+                function: 'resolve_user_name',
+                message: 'Failed to resolve host name' + error
+            });
+            return res.status(500).jsonp({
+                message: 'Internal Server Error. Please try again.'
+            });
+        });
+    })
+    .catch(error => {
+        logger.error({
+            function: 'resolve_user_name',
+            message: 'Failed to resolve guest name' + error
         });
         return res.status(500).jsonp({
             message: 'Internal Server Error. Please try again.'
@@ -161,6 +198,7 @@ exports.getGuestAppointments = (req, res, next) => {
 };
 
 exports.getAllAppointments = (req, res, next) => {
+    req.locals = {};
     Booking
     .find({ $or: [{ guest: req.params.user }, { host: req.params.user }] })
     .then(appointments => {
