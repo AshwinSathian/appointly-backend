@@ -59,6 +59,6 @@ app.use((req, res) => {
 app.listen(port, () => {
     logger.info({
         function: 'app_start',
-        message: 'Backend is listening on port ' + port
+        message: 'Backend server is listening on port ' + port
     });
 });
