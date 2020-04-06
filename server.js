@@ -12,7 +12,7 @@ const app = express();
 // Route dependencies
 const authRoutes = require('./routes/auth.routes');
 const bookingRoutes = require('./routes/booking.routes');
-const slotRoutes = require('./routes/booking.routes');
+const slotRoutes = require('./routes/slot.routes');
 
 // DB Connection
 mongoose.connect(config.get('MONGO_URI'), 

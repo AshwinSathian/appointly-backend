@@ -34,3 +34,28 @@ exports.updateActiveSlots = (req, res, next) => {
         });
     });
 };
+
+
+exports.getActiveSlots = (req, res, next) => {
+    User
+    .findOne({ email: req.userData.email })
+    .then(result => {
+        logger.info({
+            function: 'update_active_slots',
+            message: 'Active slots successfully fetched'
+        });
+        res.status(200).jsonp({ 
+            message: 'Active slots successfully fetched',
+            activeSlots: result.slots 
+        });
+    })
+    .catch(error => {
+        logger.error({
+            function: 'update_active_slots',
+            message: 'User slots fetch failed: ' + error
+        });
+        res.status(500).jsonp({
+            message: 'Internal server error. Please try again.'
+        });
+    });
+};
