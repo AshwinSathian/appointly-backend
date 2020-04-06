@@ -212,10 +212,11 @@ exports.getAllAppointments = (req, res, next) => {
         const guestAppointments = [];
         appointments.forEach(appointment => {
             const now = Date.now();
-            if (new Date(appointment.date).getTime() < now) {
+            const date = appointment.date.split('-');
+            if (new Date(date[0], date[1], date[2], appointment.slot + 4, 29).getTime() < now) {
                 pastAppointments.push(appointment);
             } else {
-                if (appointment.hsot === req.userData.email) {
+                if (appointment.hostMail === req.userData.email) {
                     hostedAppointments.push(appointment);
                 } else {
                     guestAppointments.push(appointment);
