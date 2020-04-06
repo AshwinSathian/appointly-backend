@@ -6,7 +6,7 @@ const authCheck = require('../middlewares/auth-check.middleware');
 const router = express.Router();
 
 router.get(
-    '/active-slots/:email', 
+    '/active-slots', 
     authCheck,
     slotControllers.getActiveSlots
 );
