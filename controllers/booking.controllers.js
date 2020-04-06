@@ -7,7 +7,7 @@ exports.checkSlotAvailability = (req, res, next) => {
     Booking
     .findOne({
         guestMail: req.body.guest,
-        hostMail: req.body.guest,
+        hostMail: req.body.host,
         date: req.body.date,
         slot: req.body.slot
     })
