@@ -169,7 +169,7 @@ exports.getAllAppointments = (req, res, next) => {
         const guestAppointments = [];
         appointments.forEach(appointment => {
             const now = Date.now();
-            if (appointment.date < now) {
+            if (new Date(appointment.date).getTime() < now) {
                 pastAppointments.push(appointment);
             } else {
                 if (appointment.hsot === req.userData.email) {
