@@ -71,15 +71,15 @@ exports.login = (req, res, next) => {
       { expiresIn: '1h' }
     );
     logger.info({
-        function: 'user_login',
-        message: 'User with email ' + fetchedUser.email + ' sucessfully logged in'
+      function: 'user_login',
+      message: 'User with email ' + fetchedUser.email + ' sucessfully logged in'
     });
-    console.log(token);
     res.status(200).json({
-        message: 'User with email ' + fetchedUser.email + ' sucessfully logged in. Login expires in 1 hour.',
-        token,
-        expiresIn: 3600,
-        userId: fetchedUser._id
+      message: 'User with email ' + fetchedUser.email + ' sucessfully logged in. Login expires in 1 hour.',
+      token,
+      expiresIn: 3600,
+      userId: fetchedUser._id,
+      userEmail: fetchedUser.email
     });
   })
   .catch(err => {
