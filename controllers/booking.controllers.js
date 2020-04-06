@@ -157,7 +157,7 @@ exports.updateAppointment = (req, res, next) => {
 
 exports.getHostedAppointments = (req, res, next) => {
     Booking
-    .find({ host: req.params.host })
+    .find({ hostMail: req.params.host })
     .then(appointments => {
         logger.info({
             function: 'get_hosted_appointments',
@@ -181,7 +181,7 @@ exports.getHostedAppointments = (req, res, next) => {
 
 exports.getGuestAppointments = (req, res, next) => {
     Booking
-    .find({ guest: req.params.guest })
+    .find({ guestMail: req.params.guest })
     .then(appointments => {
         logger.info({
             function: 'get_guest_appointments',
@@ -205,7 +205,7 @@ exports.getGuestAppointments = (req, res, next) => {
 
 exports.getAllAppointments = (req, res, next) => {
     Booking
-    .find({ $or: [{ guest: req.params.user }, { host: req.params.user }] })
+    .find({ $or: [{ guestMail: req.params.user }, { hostMail: req.params.user }] })
     .then(appointments => {
         const pastAppointments = [];
         const hostedAppointments = [];
