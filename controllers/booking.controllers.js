@@ -213,8 +213,6 @@ exports.getAllAppointments = (req, res, next) => {
         appointments.forEach(appointment => {
             const now = Date.now();
             const date = appointment.date.split('-');
-            console.log(new Date(date[0], date[1] - 1, date[2], appointment.slot + 4, 29))
-            console.log(new Date(now))
             if (new Date(date[0], date[1] - 1, date[2], appointment.slot + 4, 29).getTime() < now) {
                 pastAppointments.push(appointment);
             } else {
