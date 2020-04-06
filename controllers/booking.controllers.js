@@ -312,6 +312,7 @@ exports.fetchBookings = (req, res, next) => {
         res.status(200).jsonp({
             message: 'Booked slots for today and tomorrow fetched successfully',
             name: req.locals.name,
+            email: req.locals.email,
             activeSlots: req.locals.slots,
             todaysBookedSlots,
             tomorrowsBookedSlots
