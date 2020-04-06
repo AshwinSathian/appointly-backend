@@ -6,8 +6,8 @@ const User = require('../models/user.model');
 exports.checkSlotAvailability = (req, res, next) => {
     Booking
     .findOne({
-        guest: req.body.guest,
-        host: req.body.guest,
+        guestMail: req.body.guest,
+        hostMail: req.body.guest,
         date: req.body.date,
         slot: req.body.slot
     })
@@ -213,7 +213,9 @@ exports.getAllAppointments = (req, res, next) => {
         appointments.forEach(appointment => {
             const now = Date.now();
             const date = appointment.date.split('-');
-            if (new Date(date[0], date[1], date[2], appointment.slot + 4, 29).getTime() < now) {
+            console.log(new Date(date[0], date[1] - 1, date[2], appointment.slot + 4, 29))
+            console.log(new Date(now))
+            if (new Date(date[0], date[1] - 1, date[2], appointment.slot + 4, 29).getTime() < now) {
                 pastAppointments.push(appointment);
             } else {
                 if (appointment.hostMail === req.userData.email) {
@@ -246,7 +248,7 @@ exports.getAllAppointments = (req, res, next) => {
 };
 
 exports.deleteAppointment = (req, res, next) => {
-    Booking.deleteOne({ _id: req.params.id, host: req.userData.email })
+    Booking.deleteOne({ _id: req.params.id, hostMail: req.userData.email })
     .then(result => {
         if (result.n > 0) {
             logger.info({
