@@ -17,6 +17,7 @@ router.put(
     '/update-appointment/:id', 
     authCheck,
     bookingControllers.checkSlotAvailability,
+    bookingControllers.resolveUserMame,
     bookingControllers.updateAppointment
 );
 

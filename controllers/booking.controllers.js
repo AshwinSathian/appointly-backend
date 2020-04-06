@@ -40,10 +40,12 @@ exports.checkSlotAvailability = (req, res, next) => {
 };
 
 exports.resolveUserMame = (req, res, next) => {
+    req.body.guestMail = req.body.guest;
     User
     .findOne({ email: req.body.guest })
     .then(fetchedUser => {
         req.body.guest = fetchedUser.name;
+        req.body.hostMail = req.body.host;
         User
         .findOne({ email: req.body.host })
         .then(fetchedUser => {
@@ -78,7 +80,9 @@ exports.resolveUserMame = (req, res, next) => {
 exports.bookAppointment = (req, res, next) => {
     const newAppointment = new Booking({
         guest: req.body.guest,
+        guestMail: req.body.guestMail,
         host: req.body.host,
+        hostMail: req.body.hostMail,
         date: req.body.date,
         slot: req.body.slot,
         note: req.body.note
@@ -111,7 +115,9 @@ exports.updateAppointment = (req, res, next) => {
     const updatedAppointment = new Booking({
         _id: req.params.id,
         guest: req.body.guest,
+        guestMail: req.body.guestMail,
         host: req.body.host,
+        hostMail: req.body.hostMail,
         date: req.body.date,
         slot: req.body.slot,
         note: req.body.note
@@ -198,7 +204,6 @@ exports.getGuestAppointments = (req, res, next) => {
 };
 
 exports.getAllAppointments = (req, res, next) => {
-    req.locals = {};
     Booking
     .find({ $or: [{ guest: req.params.user }, { host: req.params.user }] })
     .then(appointments => {
