@@ -10,6 +10,7 @@ exports.createUser = (req, res, next) => {
     const user = new User({
         name: req.body.name,
         email: req.body.email,
+        slug: req.body.email.split('@')[0],
         password: passwordHash
     });
     user
@@ -92,3 +93,38 @@ exports.login = (req, res, next) => {
     });
   });
 };
+
+exports.fetchUserInfo = (req, res, next) => {
+  User
+  .findOne({ slug: req.params.user })
+  .then(fetchedUser => {
+    if (fetchedUser) {
+      req.locals = {};
+      req.locals.name = fetchedUser.name;
+      req.locals.email = fetchedUser.email;
+      req.locals.slots = fetchedUser.slots;
+      logger.info({
+        function: 'fetch_user_info',
+        message: 'Details of user with email ' + fetchedUser.email + ' sucessfully fetched'
+      });
+      next();
+    } else {
+      logger.error({
+        function: 'fetch_user_info',
+        message: 'User with email ' + fetchedUser.email + ' not found'
+      });
+      res.status(401).jsonp({
+        message: 'User with email ' + fetchedUser.email + ' not found'
+      });
+    }
+  })
+  .catch(error => {
+    logger.error({
+      function: 'fetch_user_info',
+      message: 'Failed to fetch information: ' + error
+    });
+    res.status(500).jsonp({
+      message: 'Internal server error. Please try again.'
+    });
+  });
+}

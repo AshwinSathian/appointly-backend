@@ -1,5 +1,6 @@
 const express = require('express');
 
+const authControllers = require('../controllers/auth.controllers');
 const bookingControllers = require('../controllers/booking.controllers');
 const authCheck = require('../middlewares/auth-check.middleware');
 
@@ -37,6 +38,13 @@ router.get(
     '/get-all-appointments/:user', 
     authCheck,
     bookingControllers.getAllAppointments
+);
+
+router.get(
+    '/booking-details/:user',
+    authCheck,
+    authControllers.fetchUserInfo,
+    bookingControllers.fetchBookings
 );
 
 router.delete(

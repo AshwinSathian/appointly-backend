@@ -276,3 +276,54 @@ exports.deleteAppointment = (req, res, next) => {
         });
     });
 };
+
+exports.fetchBookings = (req, res, next) => {
+    const today = new Date();
+    const tomorrow = new Date(today.getTime() + 24*60*60*1000);
+    const todayMonth = parseInt(today.getMonth()) + 1;
+    const tomorrowMonth = parseInt(tomorrow.getMonth()) + 1;
+    const processedToday = `${today.getFullYear()}-${todayMonth.toString().length > 1 ? todayMonth : '0' + todayMonth}-${today.getDate().toString().length > 1 ? today.getDate() : '0' + today.getDate()}`;
+    const processedTomorrow = `${tomorrow.getFullYear()}-${tomorrowMonth.toString().length > 1 ? tomorrowMonth : '0' + tomorrowMonth}-${tomorrow.getDate().toString().length > 1 ? tomorrow.getDate() : '0' + tomorrow.getDate()}`;
+    Booking
+    .find({ 
+        $or: [{ guestMail: req.locals.email }, { hostMail: req.locals.email }],
+        $or: [{ date: processedToday }, { date: processedTomorrow }]
+    })
+    .then(bookings => {
+        const todaysBookedSlots = [];
+        const tomorrowsBookedSlots = [];
+        if (bookings) {
+            bookings.forEach(booking => {
+                const date = booking.date;
+                if (
+                    date === processedToday
+                ) {
+                    todaysBookedSlots.push(booking.slot);
+                } else {
+                    tomorrowsBookedSlots.push(booking.slot);
+                }
+            });
+        }
+
+        logger.info({
+            function: 'fetch_bookings',
+            message: 'Booked slots for today and tomorrow fetched successfully'
+        });
+        res.status(200).jsonp({
+            message: 'Booked slots for today and tomorrow fetched successfully',
+            name: req.locals.name,
+            activeSlots: req.locals.slots,
+            todaysBookedSlots,
+            tomorrowsBookedSlots
+        });
+    })
+    .catch(error => {
+        logger.error({
+            function: 'fetch_bookings',
+            message: 'Failed to fetch bookings: ' + error
+        });
+        res.status(500).jsonp({
+            message: 'Internal server error. Please try again.'
+        });
+    });
+};
