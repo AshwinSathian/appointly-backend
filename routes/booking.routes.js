@@ -9,8 +9,8 @@ router.post(
     '/book-appointment', 
     authCheck,
     bookingControllers.checkSlotAvailability,
-    // bookingControllers.resolveUserMame,
-    // bookingControllers.bookAppointment
+    bookingControllers.resolveUserMame,
+    bookingControllers.bookAppointment
 );
 
 router.put(
