@@ -207,20 +207,13 @@ exports.getAllAppointments = (req, res, next) => {
     Booking
     .find({ $or: [{ guestMail: req.params.user }, { hostMail: req.params.user }] })
     .then(appointments => {
-        const pastAppointments = [];
         const hostedAppointments = [];
         const guestAppointments = [];
         appointments.forEach(appointment => {
-            const now = Date.now();
-            const date = appointment.date.split('-');
-            if (new Date(date[0], date[1] - 1, date[2], appointment.slot + 4, 29).getTime() < now) {
-                pastAppointments.push(appointment);
+            if (appointment.hostMail === req.params.user) {
+                hostedAppointments.push(appointment);
             } else {
-                if (appointment.hostMail === req.userData.email) {
-                    hostedAppointments.push(appointment);
-                } else {
-                    guestAppointments.push(appointment);
-                }
+                guestAppointments.push(appointment);
             }
         });
         logger.info({
@@ -229,7 +222,6 @@ exports.getAllAppointments = (req, res, next) => {
         });
         res.status(200).jsonp({
             message: 'All appointments of user successfully fetched',
-            pastAppointments,
             hostedAppointments,
             guestAppointments
         });
