@@ -1,6 +1,6 @@
 {
-    "MONGO_URI": "mongodb+srv://AshwinSathian:8ocdrc5bHRUlJxBu@cluster0-62iol.mongodb.net/calendlyClone?retryWrites=true&w=majority",
-    "JWT_KEY": "c3YxPqHZXutC4hQx66duKnpZZXwaFMDM",
-    "GOOGLE_CALENDAR_CLIENT_ID": "209559628271-m06i0djhoj4da6dr0kl9elji5jflorvf.apps.googleusercontent.com",
-    "GOOGLE_CALENDAR_CLIENT_SECRET": "TFn4BNRerhHZtvT1_61z2TS-"
+  "MONGO_URI": "mongodb+srv://AshwinSathian:GBBJmDxZkMts5m4Z@cluster0-62iol.mongodb.net/calendlyClone?retryWrites=true&w=majority",
+  "JWT_KEY": "c3YxPqHZXutC4hQx66duKnpZZXwaFMDM",
+  "GOOGLE_CALENDAR_CLIENT_ID": "209559628271-m06i0djhoj4da6dr0kl9elji5jflorvf.apps.googleusercontent.com",
+  "GOOGLE_CALENDAR_CLIENT_SECRET": "TFn4BNRerhHZtvT1_61z2TS-"
 }
